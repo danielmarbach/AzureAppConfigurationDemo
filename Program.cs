@@ -23,15 +23,16 @@ namespace AzureAppConfigurationDemo
                     config.AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
                     config.AddJsonFile("appsettings.local.json", optional: true, reloadOnChange: true);
 
+                    if (hostContext.HostingEnvironment.IsDevelopment())
+                    {
+                        config.AddUserSecrets<Program>();
+                    }
+
                     if (hostContext.HostingEnvironment.IsProduction())
                     {
                         var settings = config.Build();
                         config.AddAzureAppConfiguration(o => o.Connect(settings.GetConnectionString("AppConfig"))
-                            .Watch("MySettings:FirstValue", TimeSpan.FromSeconds(5)));
-                    }
-                    if (hostContext.HostingEnvironment.IsDevelopment())
-                    {
-                        config.AddUserSecrets<Program>();
+                            .Watch("MySettings:FirstValue", label: hostContext.HostingEnvironment.EnvironmentName, TimeSpan.FromSeconds(5)));
                     }
                 })
                 .ConfigureServices((hostContext, services) =>
