@@ -18,6 +18,7 @@ namespace AzureAppConfigurationDemo
                     configHost.SetBasePath(Directory.GetCurrentDirectory());
                     configHost.AddJsonFile("hostsettings.json", optional: true, reloadOnChange: true);
                     configHost.AddEnvironmentVariables();
+                    configHost.AddCommandLine(args);
                 })
                 .ConfigureAppConfiguration((hostContext, config) =>
                 {
@@ -33,7 +34,8 @@ namespace AzureAppConfigurationDemo
                     {
                         var settings = config.Build();
                         config.AddAzureAppConfiguration(o => o.Connect(settings.GetConnectionString("AppConfig"))
-                            .Watch("MySettings:FirstValue", label: hostContext.HostingEnvironment.EnvironmentName, TimeSpan.FromSeconds(5)));
+                            .Use("*", labelFilter: hostContext.HostingEnvironment.EnvironmentName)
+                            .Watch("MySettings:FirstValue", TimeSpan.FromSeconds(5)));
                     }
                 })
                 .ConfigureServices((hostContext, services) =>
