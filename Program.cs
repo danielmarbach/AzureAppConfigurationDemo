@@ -35,7 +35,7 @@ namespace AzureAppConfigurationDemo
                         var settings = config.Build();
                         config.AddAzureAppConfiguration(o => o.Connect(settings.GetConnectionString("AppConfig"))
                             .Use("*", labelFilter: hostContext.HostingEnvironment.EnvironmentName)
-                            .Watch("MySettings:FirstValue", TimeSpan.FromSeconds(5)));
+                            .Watch("MySettings:FirstValue", label: hostContext.HostingEnvironment.EnvironmentName, TimeSpan.FromSeconds(5)));
                     }
                 })
                 .ConfigureServices((hostContext, services) =>
