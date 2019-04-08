@@ -17,6 +17,7 @@ namespace AzureAppConfigurationDemo
                 {
                     configHost.SetBasePath(Directory.GetCurrentDirectory());
                     configHost.AddJsonFile("hostsettings.json", optional: true, reloadOnChange: true);
+                    configHost.AddEnvironmentVariables();
                 })
                 .ConfigureAppConfiguration((hostContext, config) =>
                 {
