@@ -28,7 +28,7 @@ namespace AzureAppConfigurationDemo
                         config.AddUserSecrets<Program>();
                     }
 
-                    if (hostContext.HostingEnvironment.IsProduction())
+                    if (!hostContext.HostingEnvironment.IsDevelopment())
                     {
                         var settings = config.Build();
                         config.AddAzureAppConfiguration(o => o.Connect(settings.GetConnectionString("AppConfig"))
